@@ -1,0 +1,41 @@
+{
+  "name": "cloud-server-co3261",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "nodemon --watch src -e ts,js,conf,json --exec \"tsc && node dist/server.js\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naminduranathunga/story-telling-cloud-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/naminduranathunga/story-telling-cloud-server/issues"
+  },
+  "homepage": "https://github.com/naminduranathunga/story-telling-cloud-server#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.1.1",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.57.0",
+    "globals": "^15.0.0",
+    "nodemon": "^3.1.0",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.7.1"
+  },
+  "dependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
+    "axios": "^1.6.8",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.3.2"
+  }
+}

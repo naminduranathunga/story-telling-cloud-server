@@ -1,0 +1,589 @@
+{
+	"info": {
+		"_postman_id": "d5374306-a464-4438-913b-75b2fd403ebb",
+		"name": "Cloud Server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25355108"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "articles",
+					"item": [
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\":\"Song of the Sapphire Sea\",\r\n    \"content\":\"In a forgotten corner of the ocean, a mermaid swam alone, her sapphire tail shimmering in the moonlight. With each stroke, she sang a haunting melody, a song of longing for the world above. One night, a sailor heard her enchanting voice and followed its ethereal trail, his ship guided by the promise of something extraordinary. When he finally reached her, he found not just a creature of myth but a kindred spirit who yearned for freedom as much as he did.\"\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/articles/create",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"articles",
+										"create"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Create_ex",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"title\":\"Midnight Literary Soirée\",\r\n    \"content\":\"As the old clock struck midnight, the bookstore came to life. Books whispered secrets to each other, pages rustled with excitement, and characters from different worlds gathered for a clandestine meeting. Among them, Sherlock Holmes debated with Elizabeth Bennet while Harry Potter and Frodo Baggins discussed the perils of their respective adventures. It was a literary soirée where imagination knew no bounds and where every tale found its echo in another.\"\r\n\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/api/articles/create",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"api",
+												"articles",
+												"create"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "791"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"317-uuzcZd6aARYT4bpity5ndiaDjrY\""
+										},
+										{
+											"key": "Date",
+											"value": "Sun, 28 Apr 2024 02:39:51 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"message\": \"Article created successfully\",\n    \"article\": {\n        \"title\": \"Midnight Literary Soirée\",\n        \"user_id\": \"662c952e8ad63409235cf882\",\n        \"tags\": [],\n        \"content\": \"As the old clock struck midnight, the bookstore came to life. Books whispered secrets to each other, pages rustled with excitement, and characters from different worlds gathered for a clandestine meeting. Among them, Sherlock Holmes debated with Elizabeth Bennet while Harry Potter and Frodo Baggins discussed the perils of their respective adventures. It was a literary soirée where imagination knew no bounds and where every tale found its echo in another.\",\n        \"likes\": 0,\n        \"comments_count\": 0,\n        \"share_count\": 0,\n        \"_id\": \"662db6f3825e0f536bce5e1a\",\n        \"date_created\": \"2024-04-28T02:39:47.009Z\",\n        \"date_updated\": \"2024-04-28T02:39:47.009Z\",\n        \"images\": [],\n        \"__v\": 0\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"article_id\":\"662d446d635b7f3bec207c03\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/articles/delete",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"articles",
+										"delete"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Suggested Posts",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/articles/get-suggested",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"articles",
+										"get-suggested"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "example 1",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/api/articles/get-suggested",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"api",
+												"articles",
+												"get-suggested"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "1607"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"647-nw795me0Pk0FGfeJW4cIoZUC7/c\""
+										},
+										{
+											"key": "Date",
+											"value": "Sun, 28 Apr 2024 03:17:40 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"message\": \"Suggested articles\",\n    \"articles\": [\n        {\n            \"_id\": \"662dbb5ab00c08fd0898063e\",\n            \"user_id\": \"662c952e8ad63409235cf882\",\n            \"title\": \"Forge of Honor\",\n            \"tags\": [],\n            \"likes\": 0,\n            \"comments_count\": 0,\n            \"share_count\": 0\n        },\n        {\n            \"_id\": \"662dbb5bb00c08fd08980640\",\n            \"user_id\": \"662c952e8ad63409235cf882\",\n            \"title\": \"Campfire Chronicles\",\n            \"tags\": [],\n            \"likes\": 0,\n            \"comments_count\": 0,\n            \"share_count\": 0\n        },\n        {\n            \"_id\": \"662dbb59b00c08fd08980636\",\n            \"user_id\": \"662c952e8ad63409235cf882\",\n            \"title\": \"Witch's Glade\",\n            \"tags\": [],\n            \"likes\": 0,\n            \"comments_count\": 0,\n            \"share_count\": 0\n        },\n        {\n            \"_id\": \"662dbb5ab00c08fd0898063c\",\n            \"user_id\": \"662c952e8ad63409235cf882\",\n            \"title\": \"Baker's Kindness\",\n            \"tags\": [],\n            \"likes\": 0,\n            \"comments_count\": 0,\n            \"share_count\": 0\n        },\n        {\n            \"_id\": \"662dbb5ab00c08fd08980638\",\n            \"user_id\": \"662c952e8ad63409235cf882\",\n            \"title\": \"Urban Canvas\",\n            \"tags\": [],\n            \"likes\": 0,\n            \"comments_count\": 0,\n            \"share_count\": 0\n        },\n        {\n            \"_id\": \"662dbb59b00c08fd08980634\",\n            \"user_id\": \"662c952e8ad63409235cf882\",\n            \"title\": \"Song of the Sapphire Sea\",\n            \"tags\": [],\n            \"likes\": 0,\n            \"comments_count\": 0,\n            \"share_count\": 0\n        },\n        {\n            \"_id\": \"662dbb59b00c08fd08980630\",\n            \"user_id\": \"662c952e8ad63409235cf882\",\n            \"title\": \"Melodies of the City\",\n            \"tags\": [],\n            \"likes\": 0,\n            \"comments_count\": 0,\n            \"share_count\": 0\n        },\n        {\n            \"_id\": \"662dbb58b00c08fd0898062e\",\n            \"user_id\": \"662c952e8ad63409235cf882\",\n            \"title\": \"Midnight Literary Soirée\",\n            \"tags\": [],\n            \"likes\": 0,\n            \"comments_count\": 0,\n            \"share_count\": 0\n        },\n        {\n            \"_id\": \"662dbb59b00c08fd08980632\",\n            \"user_id\": \"662c952e8ad63409235cf882\",\n            \"title\": \"Garden of Cherry Blossoms\",\n            \"tags\": [],\n            \"likes\": 0,\n            \"comments_count\": 0,\n            \"share_count\": 0\n        },\n        {\n            \"_id\": \"662dbb5ab00c08fd0898063a\",\n            \"user_id\": \"662c952e8ad63409235cf882\",\n            \"title\": \"Nomad's Mirage\",\n            \"tags\": [],\n            \"likes\": 0,\n            \"comments_count\": 0,\n            \"share_count\": 0\n        }\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Get Single Post",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"article_id\":\"662dbb5bb00c08fd08980640\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/articles/get-single",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"articles",
+										"get-single"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "example 1",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"article_id\":\"662dbb5bb00c08fd08980640\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base_url}}/api/articles/get-single",
+											"host": [
+												"{{base_url}}"
+											],
+											"path": [
+												"api",
+												"articles",
+												"get-single"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "X-Powered-By",
+											"value": "Express"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "742"
+										},
+										{
+											"key": "ETag",
+											"value": "W/\"2e6-U1PKXVOGVS1M7L3murd8cA86Jks\""
+										},
+										{
+											"key": "Date",
+											"value": "Sun, 28 Apr 2024 03:24:20 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"message\": \"Article found\",\n    \"article\": {\n        \"_id\": \"662dbb5bb00c08fd08980640\",\n        \"title\": \"Campfire Chronicles\",\n        \"user_id\": \"662c952e8ad63409235cf882\",\n        \"tags\": [],\n        \"content\": \"Beneath a canopy of stars, a group of children huddled around a campfire, their faces illuminated by the flickering flames. With each tale they spun, their imaginations soared, weaving stories of dragons and treasure hunts, of faraway lands and daring adventures. As they laughed and dreamed together, they formed bonds that would last a lifetime, forging memories that would shine brighter than any constellation in the night sky.\",\n        \"likes\": 0,\n        \"comments_count\": 0,\n        \"share_count\": 0,\n        \"date_created\": \"2024-04-28T02:58:35.205Z\",\n        \"date_updated\": \"2024-04-28T02:58:35.205Z\",\n        \"images\": [],\n        \"__v\": 0\n    }\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Register new User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Namindu\",\r\n    \"email\":\"namindu@live.com\",\r\n    \"password\": \"12345@Abcd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/user/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login a user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields - message and token\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.message).to.exist;\r",
+									"    pm.expect(responseData.token).to.exist;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Message and token are non-empty strings\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData.message).to.be.a('string').and.to.have.length.above(0, \"Message should be a non-empty string\");\r",
+									"    pm.expect(responseData.token).to.be.a('string').and.to.have.length.above(0, \"Token should be a non-empty string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"namindu@live.com\",\r\n    \"password\": \"12345@Abcd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/user/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login a user Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields - message and token\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.message).to.exist;\r",
+									"    pm.expect(responseData.token).to.exist;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Message and token are non-empty strings\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData.message).to.be.a('string').and.to.have.length.above(0, \"Message should be a non-empty string\");\r",
+									"    pm.expect(responseData.token).to.be.a('string').and.to.have.length.above(0, \"Token should be a non-empty string\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/user/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "jwt",
+				"jwt": [
+					{
+						"key": "payload",
+						"value": "{\r\n    \"_id\":\"662c952e8ad63409235cf882\",\r\n    \"email\": \"namindu@live.com\",\r\n    \"name\": \"Namindu\"\r\n}",
+						"type": "string"
+					},
+					{
+						"key": "secret",
+						"value": "CloudComputingProject%2024by21ENG107",
+						"type": "string"
+					},
+					{
+						"key": "addTokenTo",
+						"value": "header",
+						"type": "string"
+					},
+					{
+						"key": "algorithm",
+						"value": "HS256",
+						"type": "string"
+					},
+					{
+						"key": "isSecretBase64Encoded",
+						"value": false,
+						"type": "boolean"
+					},
+					{
+						"key": "headerPrefix",
+						"value": "Bearer",
+						"type": "string"
+					},
+					{
+						"key": "queryParamKey",
+						"value": "token",
+						"type": "string"
+					},
+					{
+						"key": "header",
+						"value": "{}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3300",
+			"type": "string"
+		}
+	]
+}
