@@ -3,6 +3,7 @@
 export interface SimpleArticle {
     _id: string,
     user_id: string,
+    user_name: string,
     title: string,
     thumbnail: string,
     tags: string,
@@ -24,5 +25,8 @@ export interface FullArticle extends SimpleArticle {
     content_plain: string,
     audio_version: string,
     images: Array<ArticleImage>,
+    created_at: string,
+    body?: Array<any>,
+    did_i_liked?: boolean,
 }
 

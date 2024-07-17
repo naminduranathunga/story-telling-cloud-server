@@ -1,6 +1,7 @@
-import mongoose, { Schema, Types, model } from "mongoose";
-
-const ArticleImageSchema = new Schema({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = require("mongoose");
+const ArticleImageSchema = new mongoose_1.Schema({
     path: {
         type: String,
         required: true
@@ -10,18 +11,18 @@ const ArticleImageSchema = new Schema({
         required: true
     },
 });
-const ArticleSchema = new Schema({
+const ArticleSchema = new mongoose_1.Schema({
     title: {
         type: String,
         required: true
     },
     user_id: {
-        type: Types.ObjectId,
+        type: mongoose_1.Types.ObjectId,
         ref: 'User',
         required: true
     },
     tags: {
-        type: Array<String>,
+        type: (Array),
         required: false
     },
     date_created: {
@@ -51,7 +52,6 @@ const ArticleSchema = new Schema({
         required: false
     },
     images: [ArticleImageSchema],
-
     likes: {
         type: Number,
         default: 0,
@@ -68,16 +68,15 @@ const ArticleSchema = new Schema({
         required: false
     },
     categories: {
-        type: Array<mongoose.Types.ObjectId>,
+        type: (Array),
         ref: 'Category',
         required: false
     },
     body: {
-        type: Array<any>,
+        type: (Array),
         required: false,
         default: []
     }
 });
-
-const ArticleModel = model('Article', ArticleSchema);
-export default ArticleModel;
+const ArticleModel = (0, mongoose_1.model)('Article', ArticleSchema);
+exports.default = ArticleModel;

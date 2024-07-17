@@ -3,14 +3,13 @@ import UserModel from "../../models/UserModel";
 import ConnectMongoDB from "../../lib/connect_mongodb";
 import { hash, compare } from "bcrypt";
 import { UserInterface } from "../../interfaces/user_interface";
-import { HydratedDocument } from "mongoose";
 import jwt from "jsonwebtoken";
 /** 
  * Handles the user login
  * @param req 
  * @param res 
  */
-export function login_user(req: Request, res: Response) {
+export async function login_user(req: Request, res: Response) {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
@@ -20,7 +19,7 @@ export function login_user(req: Request, res: Response) {
         }
         ConnectMongoDB();
 
-        const user = UserModel.findOne({email});
+        const user = await UserModel.findOne({email});
         if (!user) {
             return res.status(400).json({
                 message: "Email or password is incorrect"
@@ -29,6 +28,7 @@ export function login_user(req: Request, res: Response) {
         const user2: UserInterface = user as unknown as UserInterface; 
 
         // check if the password is correct
+        console.log(user2, password);
         const is_valid = compare(password, user2.password);
         if (!is_valid) {
             return res.status(400).json({
@@ -40,7 +40,7 @@ export function login_user(req: Request, res: Response) {
 
         // prepare the jwt token
         const token = {
-            user_id: user2._id,
+            _id: user2._id,
             email: user2.email,
             name: user2.name
         }

@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const edit_articles_1 = require("../../controllers/posts/edit_articles");
+const retrive_articles_1 = require("../../controllers/posts/retrive_articles");
+const story_user_interactions_1 = require("../../controllers/posts/story_user_interactions");
+const article_routes = (0, express_1.Router)();
+article_routes.post('/create', edit_articles_1.create_article);
+article_routes.post('/delete', edit_articles_1.delete_article);
+article_routes.post('/get-suggested', retrive_articles_1.get_suggested_articles);
+article_routes.post('/get-single', retrive_articles_1.get_article);
+article_routes.post('/get-body', retrive_articles_1.get_article_body);
+article_routes.post('/add-delete-like', story_user_interactions_1.add_like_to_story);
+article_routes.post('/get-comments', story_user_interactions_1.get_comments_of_the_story);
+article_routes.post('/add-comment', story_user_interactions_1.add_comment_to_story);
+article_routes.post('/delete-comment', story_user_interactions_1.remove_comment_from_story);
+exports.default = article_routes;

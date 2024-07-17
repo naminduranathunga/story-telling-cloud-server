@@ -56,7 +56,11 @@ async function uploadStory(story) {
     try {
         const response = await axios.post(url, {
             title: story.title,
-            content: story.content
+            content: story.content,
+            body: [{
+                type: 'text',
+                content: story.content
+            }]
         }, {
             headers: {
                 'Content-Type': 'application/json',

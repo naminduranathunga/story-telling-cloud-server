@@ -16,7 +16,6 @@ export async function auth_user(req: Request, res: Response, next: NextFunction)
     try {
         const auth_header = req.headers['authorization'];
         const token = auth_header?.split(' ')[1];
-        
         if (!token) {
             return res.status(401).json({
                 message: "Unauthorized 0"

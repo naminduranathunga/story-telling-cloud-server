@@ -10,6 +10,8 @@ import { get_current_user } from "../../middleware/auth_user";
 import UserModel from "../../models/UserModel";
 import { FullArticle, SimpleArticle } from "../../interfaces/user_article";
 import ArticleModel from "../../models/ArticleModel";
+import mongoose from "mongoose";
+import StoryLikeModel from "../../models/StoryLikes";
 
 
 /**
@@ -25,15 +27,17 @@ export async function get_suggested_articles(req: Request, res: Response){
             throw new Error("User not found");
         }
 
-        ConnectMongoDB();
+        await ConnectMongoDB();
 
         // for testing, we will send random articles
-        const { page, per_page, order_by, order, tags } = req.body as {
+        const { page, per_page, order_by, order, tags, category, search } = req.body as {
             page?: number, 
             per_page?: number, 
             order_by?: string, 
             order?: string, 
-            tags?: string[]
+            tags?: string[],
+            category?: string,
+            search?: string,
         };
         
         // parse default values
@@ -48,24 +52,40 @@ export async function get_suggested_articles(req: Request, res: Response){
             // get articles with at least one of the tags
             query = {tags: {$in: tags}};
         }
+        if (typeof(category) !== "undefined" && !category) {
+            query = {...query, category: mongoose.Types.ObjectId.createFromHexString(category)};
+        }
+        if (typeof(search) !== "undefined" && !search) {
+            query = {...query, $or: [
+                {title: {$regex: search, $options: "i"}},
+                {content_plain: {$regex: search, $options: "i"}}
+            ]};
+        }
+        if (typeof(search) !== "undefined" && !search) {
+            query = {...query, $text: {$search: search}};
+        }
 
         const articles = await ArticleModel.find(query)
             .sort({order_by_str: (order_str == "asc" ? 1 : -1)})
             .skip((page_num - 1) * per_page_num)
-            .limit(per_page_num);
+            .limit(per_page_num)
+            .populate("user_id");
 
         // parse the articles to simple articles
         const simple_articles = articles.map(article => {
-            const ar = article as unknown as SimpleArticle;
+            console.log(article);
+            const ar = article as any;
             return {
                 _id: ar._id,
-                user_id: ar.user_id,
+                user_id: ar.user_id?._id ?? "Unknown",
+                user_name: ar.user_id?.name ?? "Unknown",
                 title: ar.title,
                 thumbnail: ar.thumbnail,
                 tags: ar.tags,
                 likes: ar.likes,
                 comments_count: ar.comments_count,
                 share_count: ar.share_count,
+                
             }
         });
 
@@ -91,11 +111,67 @@ export async function get_suggested_articles(req: Request, res: Response){
 
 export async function get_article(req: Request, res: Response){
     try {
-        ConnectMongoDB();
+        await ConnectMongoDB();
 
-        const {article_id} = req.body as {article_id: string};
+        const {story_id} = req.body as {story_id: string};
 
-        const article = await ArticleModel.findById(article_id);
+        const article:any = await ArticleModel.findById(story_id).populate("user_id");
+        if (!article) {
+            return res.status(404).json({
+                message: "Article not found"
+            });
+        }
+
+        const myLike = await StoryLikeModel.findOne({story_id: article._id, user_id: get_current_user()?._id});
+
+        const article_: FullArticle = {
+            _id: article._id,
+            user_id: article.user_id?._id ?? "Unknown",
+            user_name: article.user_id?.name ?? "Unknown",
+            title: article.title,
+            content: article.content,
+            content_plain: article.content_plain,
+            audio_version: article.audio_version,
+            thumbnail: article.thumbnail,
+            images: article.images,
+            tags: article.tags,
+            likes: article.likes,
+            comments_count: article.comments_count,
+            share_count: article.share_count,
+            created_at: article.date_created,
+            did_i_liked: myLike ? true : false,
+            //body: article.body ? article.body : []
+        }
+
+
+
+        return res.json({
+            message: "Article found",
+            story: article_
+        });
+
+    } catch (error) {
+        console.error("Error getting article", error);
+        return res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+}
+
+
+
+/**
+ * @function get_article_body
+ * @description Get a single article by id
+ */
+
+export async function get_article_body(req: Request, res: Response){
+    try {
+        await ConnectMongoDB();
+
+        const {story_id} = req.body as {story_id: string};
+
+        const article:any = await ArticleModel.findById(story_id).select("body");
         if (!article) {
             return res.status(404).json({
                 message: "Article not found"
@@ -104,7 +180,7 @@ export async function get_article(req: Request, res: Response){
 
         return res.json({
             message: "Article found",
-            article: article as unknown as FullArticle
+            story: article.body
         });
 
     } catch (error) {
