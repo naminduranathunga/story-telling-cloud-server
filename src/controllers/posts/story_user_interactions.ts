@@ -6,6 +6,7 @@ import { get_current_user } from "../../middleware/auth_user";
 import StoryLikeModel from "../../models/StoryLikes";
 import mongoose from "mongoose";
 import StoryCommentModel from "../../models/StoryComment";
+import { add_action_to_db } from "../interactions/record_interactions";
 
 
 
@@ -41,6 +42,16 @@ export async function add_like_to_story(req: Request, res: Response){
             await StoryLikeModel.deleteOne({story_id, user_id});
             await article.save();
             liked_by_me = false;
+
+            try{
+                add_action_to_db({
+                    action: "like",
+                    story_id,
+                }, user._id);
+            } catch (error) {
+                console.error("Error adding action to db", error);
+            }
+
         } else {
             // add like
             article.likes += 1;
@@ -113,6 +124,16 @@ export async function add_comment_to_story(req: Request, res: Response){
         await commentDoc.save();
         article.comments_count += 1;
         await article.save();
+
+        try{
+            add_action_to_db({
+                action: "comment",
+                story_id,
+                comment_id: commentDoc._id,
+            }, user._id);
+        } catch (error) {
+            console.error("Error adding action to db", error);
+        }
         
 
         return res.json({

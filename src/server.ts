@@ -28,4 +28,6 @@ app.use('/api', router);
 // start the server
 app.listen(port, () => {
   console.log(`server started at http://localhost:${port}`);
+  // log all routes list
+  
 });

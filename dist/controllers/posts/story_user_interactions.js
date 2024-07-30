@@ -19,6 +19,7 @@ const auth_user_1 = require("../../middleware/auth_user");
 const StoryLikes_1 = __importDefault(require("../../models/StoryLikes"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const StoryComment_1 = __importDefault(require("../../models/StoryComment"));
+const record_interactions_1 = require("../interactions/record_interactions");
 /**
  * @function add_like_to_story
  * @description Get a single article by id
@@ -48,6 +49,15 @@ function add_like_to_story(req, res) {
                 yield StoryLikes_1.default.deleteOne({ story_id, user_id });
                 yield article.save();
                 liked_by_me = false;
+                try {
+                    (0, record_interactions_1.add_action_to_db)({
+                        action: "like",
+                        story_id,
+                    }, user._id);
+                }
+                catch (error) {
+                    console.error("Error adding action to db", error);
+                }
             }
             else {
                 // add like
@@ -113,6 +123,16 @@ function add_comment_to_story(req, res) {
             yield commentDoc.save();
             article.comments_count += 1;
             yield article.save();
+            try {
+                (0, record_interactions_1.add_action_to_db)({
+                    action: "comment",
+                    story_id,
+                    comment_id: commentDoc._id,
+                }, user._id);
+            }
+            catch (error) {
+                console.error("Error adding action to db", error);
+            }
             return res.json({
                 message: "Comment added.",
                 comments_count: article.comments_count,
