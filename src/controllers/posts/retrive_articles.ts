@@ -12,6 +12,7 @@ import { FullArticle, SimpleArticle } from "../../interfaces/user_article";
 import ArticleModel from "../../models/ArticleModel";
 import mongoose from "mongoose";
 import StoryLikeModel from "../../models/StoryLikes";
+import { execute_cmd_and_get_output } from "../../lib/execute_cmd_and_get_output";
 
 
 /**
@@ -21,6 +22,9 @@ import StoryLikeModel from "../../models/StoryLikes";
  */
 
 export async function get_suggested_articles(req: Request, res: Response){
+    await get_suggested_article_personalized(req, res);
+    return;
+    /*
     try {
         const user = get_current_user();
         if (!user) {
@@ -42,7 +46,7 @@ export async function get_suggested_articles(req: Request, res: Response){
         
         // parse default values
         const page_num = page ? page : 1;
-        const per_page_num = per_page ? per_page : 10;
+        const per_page_num = per_page ? per_page : 20;
         const order_by_str = order_by ? order_by : "date_created";
         const order_str = order ? order : "desc";
 
@@ -99,8 +103,95 @@ export async function get_suggested_articles(req: Request, res: Response){
         return res.status(500).json({
             message: "Internal server error"
         });
+    }*/
+}
+
+
+
+/**
+ * @function get_suggested_article_personalized
+ * @description Get suggested articles for the user based on their interests. This will use external script to retrive artivcles as Full article format
+ * @method POST
+ * 
+ */
+export async function get_suggested_article_personalized(req: Request, res: Response) {
+    try {
+        const user = get_current_user();
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        await ConnectMongoDB();
+
+        // for testing, we will send random articles
+        const { page, per_page, order_by, order, tags, category, search } = req.body as {
+            page?: number, 
+            per_page?: number, 
+            order_by?: string, 
+            order?: string, 
+            tags?: string[],
+            category?: string,
+            search?: string,
+        };
+        
+        // parse default values
+        const page_num = page ? page : 1;
+        const per_page_num = per_page ? per_page : 20; 
+        const order_by_str = order_by ? order_by : "date_created";
+        const order_str = order ? order : "desc";
+
+        var articles:any[] = [];
+        const py = process.env.PYTHON_PATH;
+        const pp = process.env.SUGGESION_API;
+        
+        const cmd = py + " \""+ pp + "\" --user_id=" + user._id + " --page=" + page_num + " --perPage=" + per_page_num
+                    + " --search=\"" + (search?search:"")+ "\""
+
+        
+        /*const cmd = "python D:\\websites\\CloudComp\\story-telling-cloud-server\\hello.py --user_id=" + user._id + " --page=" + page_num + " --per_page=" + per_page_num
+                    + " --search=\"" + (search?search:"")+ "\""*/
+        // execute the command
+        const output = await execute_cmd_and_get_output(cmd);
+
+        articles = JSON.parse(output);
+
+        // retrive articles for ids
+        const query = {
+            _id: {$in: articles}
+        }
+        articles = await ArticleModel.find(query)
+            .populate("user_id");
+
+        // parse the articles to simple articles
+        const simple_articles = articles.map(article => {
+            const ar = article as any;
+            return {
+                _id: ar._id,
+                user_id: ar.user_id?._id ?? "Unknown",
+                user_name: ar.user_id?.name ?? "Unknown",
+                title: ar.title,
+                thumbnail: ar.thumbnail,
+                tags: ar.tags,
+                likes: ar.likes,
+                comments_count: ar.comments_count,
+                share_count: ar.share_count,
+                
+            }
+        });
+
+        return res.json({
+            message: "Suggested articles",
+            articles: simple_articles
+        });
+
+    } catch (error) {
+        console.error("Error getting suggested posts", error);
+        return res.status(500).json({
+            message: "Internal server error"
+        });
     }
 }
+
 
 
 

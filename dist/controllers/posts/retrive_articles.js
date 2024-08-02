@@ -16,18 +16,111 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_article_body = exports.get_article = exports.get_suggested_articles = void 0;
+exports.get_article_body = exports.get_article = exports.get_suggested_article_personalized = exports.get_suggested_articles = void 0;
 const connect_mongodb_1 = __importDefault(require("../../lib/connect_mongodb"));
 const auth_user_1 = require("../../middleware/auth_user");
 const ArticleModel_1 = __importDefault(require("../../models/ArticleModel"));
-const mongoose_1 = __importDefault(require("mongoose"));
 const StoryLikes_1 = __importDefault(require("../../models/StoryLikes"));
+const execute_cmd_and_get_output_1 = require("../../lib/execute_cmd_and_get_output");
 /**
  * @function get_suggested_articles
  * @description Get suggested articles for the user
  * @method POST
  */
 function get_suggested_articles(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield get_suggested_article_personalized(req, res);
+        return;
+        /*
+        try {
+            const user = get_current_user();
+            if (!user) {
+                throw new Error("User not found");
+            }
+    
+            await ConnectMongoDB();
+    
+            // for testing, we will send random articles
+            const { page, per_page, order_by, order, tags, category, search } = req.body as {
+                page?: number,
+                per_page?: number,
+                order_by?: string,
+                order?: string,
+                tags?: string[],
+                category?: string,
+                search?: string,
+            };
+            
+            // parse default values
+            const page_num = page ? page : 1;
+            const per_page_num = per_page ? per_page : 20;
+            const order_by_str = order_by ? order_by : "date_created";
+            const order_str = order ? order : "desc";
+    
+            // create the query
+            var query = {};
+            if (typeof(tags) !== "undefined" && !tags) {
+                // get articles with at least one of the tags
+                query = {tags: {$in: tags}};
+            }
+            if (typeof(category) !== "undefined" && !category) {
+                query = {...query, category: mongoose.Types.ObjectId.createFromHexString(category)};
+            }
+            if (typeof(search) !== "undefined" && !search) {
+                query = {...query, $or: [
+                    {title: {$regex: search, $options: "i"}},
+                    {content_plain: {$regex: search, $options: "i"}}
+                ]};
+            }
+            if (typeof(search) !== "undefined" && !search) {
+                query = {...query, $text: {$search: search}};
+            }
+    
+            const articles = await ArticleModel.find(query)
+                .sort({order_by_str: (order_str == "asc" ? 1 : -1)})
+                .skip((page_num - 1) * per_page_num)
+                .limit(per_page_num)
+                .populate("user_id");
+    
+            // parse the articles to simple articles
+            const simple_articles = articles.map(article => {
+                console.log(article);
+                const ar = article as any;
+                return {
+                    _id: ar._id,
+                    user_id: ar.user_id?._id ?? "Unknown",
+                    user_name: ar.user_id?.name ?? "Unknown",
+                    title: ar.title,
+                    thumbnail: ar.thumbnail,
+                    tags: ar.tags,
+                    likes: ar.likes,
+                    comments_count: ar.comments_count,
+                    share_count: ar.share_count,
+                    
+                }
+            });
+    
+            return res.json({
+                message: "Suggested articles",
+                articles: simple_articles
+            });
+    
+        } catch (error) {
+            console.error("Error getting suggested posts", error);
+            return res.status(500).json({
+                message: "Internal server error"
+            });
+        }*/
+    });
+}
+exports.get_suggested_articles = get_suggested_articles;
+/**
+ * @function get_suggested_article_personalized
+ * @description Get suggested articles for the user based on their interests. This will use external script to retrive artivcles as Full article format
+ * @method POST
+ *
+ */
+function get_suggested_article_personalized(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const user = (0, auth_user_1.get_current_user)();
@@ -39,36 +132,28 @@ function get_suggested_articles(req, res) {
             const { page, per_page, order_by, order, tags, category, search } = req.body;
             // parse default values
             const page_num = page ? page : 1;
-            const per_page_num = per_page ? per_page : 10;
+            const per_page_num = per_page ? per_page : 20;
             const order_by_str = order_by ? order_by : "date_created";
             const order_str = order ? order : "desc";
-            // create the query
-            var query = {};
-            if (typeof (tags) !== "undefined" && !tags) {
-                // get articles with at least one of the tags
-                query = { tags: { $in: tags } };
-            }
-            if (typeof (category) !== "undefined" && !category) {
-                query = Object.assign(Object.assign({}, query), { category: mongoose_1.default.Types.ObjectId.createFromHexString(category) });
-            }
-            if (typeof (search) !== "undefined" && !search) {
-                query = Object.assign(Object.assign({}, query), { $or: [
-                        { title: { $regex: search, $options: "i" } },
-                        { content_plain: { $regex: search, $options: "i" } }
-                    ] });
-            }
-            if (typeof (search) !== "undefined" && !search) {
-                query = Object.assign(Object.assign({}, query), { $text: { $search: search } });
-            }
-            const articles = yield ArticleModel_1.default.find(query)
-                .sort({ order_by_str: (order_str == "asc" ? 1 : -1) })
-                .skip((page_num - 1) * per_page_num)
-                .limit(per_page_num)
+            var articles = [];
+            const py = process.env.PYTHON_PATH;
+            const pp = process.env.SUGGESION_API;
+            const cmd = py + " \"" + pp + "\" --user_id=" + user._id + " --page=" + page_num + " --perPage=" + per_page_num
+                + " --search=\"" + (search ? search : "") + "\"";
+            /*const cmd = "python D:\\websites\\CloudComp\\story-telling-cloud-server\\hello.py --user_id=" + user._id + " --page=" + page_num + " --per_page=" + per_page_num
+                        + " --search=\"" + (search?search:"")+ "\""*/
+            // execute the command
+            const output = yield (0, execute_cmd_and_get_output_1.execute_cmd_and_get_output)(cmd);
+            articles = JSON.parse(output);
+            // retrive articles for ids
+            const query = {
+                _id: { $in: articles }
+            };
+            articles = yield ArticleModel_1.default.find(query)
                 .populate("user_id");
             // parse the articles to simple articles
             const simple_articles = articles.map(article => {
                 var _a, _b, _c, _d;
-                console.log(article);
                 const ar = article;
                 return {
                     _id: ar._id,
@@ -95,7 +180,7 @@ function get_suggested_articles(req, res) {
         }
     });
 }
-exports.get_suggested_articles = get_suggested_articles;
+exports.get_suggested_article_personalized = get_suggested_article_personalized;
 /**
  * @function get_article
  * @description Get a single article by id
